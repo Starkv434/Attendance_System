@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 import cv2
 import numpy as np
+import main
 
 class Train:
     # This is the constructor
@@ -30,9 +31,10 @@ class Train:
         first_label = ttk.Label(self.root, image=self.photoimg1)
         first_label.place(x=799, y=40, width=799, height=250)
 
+
         # TRAIN BUTTON
-        btn3_label = Button(self.root, text="Click Here For Attendance", command=self.train_classifier, font=("Times New Roman", 20, "bold"), bg="orange",fg="blue")
-        btn3_label.place(x=-220, y=315, width=1900, height=50, anchor=W)
+        btn3_label = Button(self.root, text="Click Here To Train Your Data", command=self.train_classifier, font=("Times New Roman", 20, "bold"), bg="orange",fg="blue")
+        btn3_label.place(x=-200, y=315, width=1900, height=50, anchor=W)
 
         bottom_face = Image.open(r"D:\My_Programs\Python\Auto Attendance\images\bottom_face.jpg")
         bottom_face = bottom_face.resize((1550, 455), Image.ANTIALIAS)  # ANTIALIAS converts high level image to low level image
@@ -40,12 +42,21 @@ class Train:
         bottom_label = Label(self.root, image=self.photoimg2)
         bottom_label.place(x=0, y=330, width=1550, height=455)
 
+        # BACK BUTTON
+        back_btn_frame = Frame(self.root, bd=1, relief=RAISED)  # Frame is used to create a frame without text on it
+        back_btn_frame.place(x=700, y=350, width=150, height=35)
+
+        back_btn = Button(back_btn_frame, text="Back", command=self.main, width=15,
+                          font=("Times New Roman", 14, "bold"), bg="green", fg="white", cursor="hand2")
+        back_btn.grid(row=0, column=0)
+
     @staticmethod
     def train_classifier():
         dataset_dir = "Photos_Data"
         path =[os.path.join(dataset_dir, image) for image in os.listdir(dataset_dir)] # list of images
         faces = []      # list of all the faces
         ids = []        # list of all the ids
+
         for image in path:    # loop to get all the images from the folder path
             img = Image.open(image).convert('L')        # converting the images to GRAY SCALE
             imageNp = np.array(img, 'uint8')
@@ -66,4 +77,7 @@ class Train:
         cv2.destroyAllWindows()
         messagebox.showinfo("Result", "Dataset Trained Successfully")
             
-            
+
+    def main(self):
+        self.app = main.Face_Recognition_System(self.root)
+

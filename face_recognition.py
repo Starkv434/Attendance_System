@@ -7,6 +7,8 @@ from tkinter import ttk
 from tkinter import messagebox
 import cv2
 from datetime import datetime
+import main
+import os
 
 class FaceRecognition(Student):
     # This is the constructor
@@ -43,6 +45,15 @@ class FaceRecognition(Student):
         right_img_label = Label(self.root, image=self.photoimg1)
         right_img_label.place(x=799, y=40, width=799, height=754)
 
+
+        # Back Button
+        back_btn_frame = Frame(self.root, bd=1, relief=RAISED)  # Frame is used to create a frame without text on it
+        back_btn_frame.place(x=70, y=90, width=150, height=35)
+
+        back_btn = Button(back_btn_frame, text="Back", command=self.main, width=15,
+                          font=("Times New Roman", 14, "bold"), bg="green", fg="white", cursor="hand2")
+        back_btn.grid(row=0, column=0)
+
         # Create CSV
         create_csv_button = Button(self.root, text="Create Attendance File", command=self.create_csv,
                                     font=("Times New Roman", 20, "bold"), bg="#3D59AB",
@@ -67,8 +78,7 @@ class FaceRecognition(Student):
         section_combo["values"] = ("Section", "A", "B", "C", "D")
         section_combo.current(0)
         section_combo.place(x=770, y=600, height="40")
-        # year_combo.grid(row=0, column=3, padx=2, pady=10,
-        #                   sticky=W)  # grid is used to combine any text field with the option values
+
 
         # ============ ATTENDANCE =========
 
@@ -83,20 +93,25 @@ class FaceRecognition(Student):
     def mark_attendance(self, id1, n, r, dept):
         path = rf"Attendance\{str(self.var_year.get())}\{ str(self.var_section.get())}\{datetime.now().strftime('attendance-%d-%m-%Y.csv')}"
 
-        with open(path, "w+") as f_output:
-            pass
+        # with open(path, "w") as f_output:
+        #     pass
+        if os.path.exists(path):
+            with open(path, "r+") as op:
+                myDataList = op.readlines()
+                names_list = []
+                for line in myDataList:
+                    entry = line.split(",")
+                    names_list.append(entry[0])
+                if (id1 not in names_list) and (n not in names_list) and (r not in names_list) and (
+                        dept not in names_list):
+                    current_time = datetime.now()
+                    d = current_time.strftime("%d/%m/%Y")
+                    t = current_time.strftime("%H:%M:%S")
+                    op.writelines(f"{id1},{n},{r},{dept},{d},{t},Present\n")
+        else:
+            f = open(path, "x")
 
-        with open(path, "r+") as op:
-            myDataList = op.readlines()
-            names_list = []
-            for line in myDataList:
-                entry = line.split(",")
-                names_list.append(entry[0])
-            if (id1 not in names_list) and (n not in names_list) and (r not in names_list) and (dept not in names_list):
-                current_time = datetime.now()
-                d = current_time.strftime("%d/%m/%Y")
-                t = current_time.strftime("%H:%M:%S")
-                op.writelines(f"{id1},{n},{r},{dept},{d},{t},Present"+"\n")
+
 
         # ========= FACE RECOGNITION ===========
 
@@ -130,7 +145,7 @@ class FaceRecognition(Student):
                 dept = new_cursor.fetchone()
                 dept = "+".join(dept)
 
-                if confindence > 78:
+                if confindence > 77:
                     cv2.putText(img, f"RollNo:{r}", (x, y - 55), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     cv2.putText(img, f"Name:{n}", (x, y - 25), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                     self.mark_attendance(i, n, r, dept)
@@ -157,3 +172,6 @@ class FaceRecognition(Student):
         cam.release()
         cv2.destroyAllWindows()
 
+
+    def main(self):
+        self.app = main.Face_Recognition_System(self.root)

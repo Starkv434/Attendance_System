@@ -6,7 +6,7 @@ import shutil
 from tkinter import messagebox
 from tkinter import filedialog
 import os
-import csv
+import csv,main
 
 alldata = []
 global mydata
@@ -162,6 +162,14 @@ class Attendance:
                            font=("Times New Roman", 14, "bold"), bg="orange", fg="blue", cursor="hand2")
         reset_btn.grid(row=0, column=3)
 
+        # Back buttons
+        back_btn_frame = Frame(left_att_frame, bd=1, relief=RAISED)  # Frame is used to create a frame without text on it
+        back_btn_frame.place(x=250, y=310, width=135, height=35)
+
+        back_btn = Button(back_btn_frame, text="Back", command=self.main, width=12,
+                          font=("Times New Roman", 14, "bold"), bg="green", fg="white", cursor="hand2")
+        back_btn.grid(row=0, column=0)
+
         # Right Frame
         Right_frame = LabelFrame(main_frame, bd=2, relief="solid", text="Attendance Information", fg="green",
                                  font=("Times New Roman", 15, "bold"))
@@ -307,4 +315,8 @@ class Attendance:
         self.var_date.set("dd/mm/yy"),
         self.var_status.set("Status"),
         self.var_time.set("")
+
+
+    def main(self):
+        self.app = main.Face_Recognition_System(self.root)
 

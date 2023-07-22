@@ -153,23 +153,20 @@ class Face_Recognition_System:
 
     # FUNCTION FOR CALLING ALL BUTTONS THROUGH MAIN WINDOW
     def student_details(self):
-        self.new_window = Toplevel(self.root)
-        self.app = Student(self.new_window)
+        self.app = Student(self.root)
+
 
     def open_images(self):
         os.startfile(r"D:\My_Programs\Python\Auto Attendance\Photos_Data")
 
     def data_train(self):
-        self.new_window = Toplevel(self.root)
-        self.app = Train(self.new_window)
+        self.app = Train(self.root)
 
     def face_recognition(self):
-        self.new_window = Toplevel(self.root)
-        self.app = FaceRecognition(self.new_window)
+        self.app = FaceRecognition(self.root)
 
     def attendance(self):
-        self.new_window = Toplevel(self.root)
-        self.app = Attendance(self.new_window)
+        self.app = Attendance(self.root)
 
     def logout(self):
         self.logout = tkinter.messagebox.askyesno("Exit", "Do you really want to logout?", parent=self.root)

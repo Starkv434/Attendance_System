@@ -5,6 +5,7 @@ from tkinter import messagebox
 from mysql.connector.locales.eng import client_error
 import mysql.connector
 import cv2
+import main
 
 global conn
 class Student:
@@ -237,6 +238,15 @@ class Student:
         update_photo_sample = Button(button_frame1, text="Update Photo Sample", width=30, command = self.generate_dataset,
                                      font=("Times New Roman", 14, "bold"), bg="orange", fg="blue", cursor="hand2")
         update_photo_sample.grid(row=0, column=1)
+
+
+        # Back buttons
+        back_btn_frame = Frame(class_frame, bd=1, relief=RAISED)  # Frame is used to create a frame without text on it
+        back_btn_frame.place(x=250, y=240, width=150, height=35)
+
+        back_btn = Button(back_btn_frame, text="Back", command=self.main, width=15,
+                          font=("Times New Roman", 14, "bold"), bg="blue", fg="white", cursor="hand2")
+        back_btn.grid(row=0, column=0)
 
         # Right Frame
         Right_frame = LabelFrame(main_frame, bd=2, relief="solid", text="Student Details",
@@ -565,7 +575,7 @@ class Student:
                         cv2.imshow("Cropped Face", cap_face)
 
                     # it will display a frame for 1ms, after which display will be automatically closed.
-                    if cv2.waitKey(1) == 13 or int(img_id) == 200:
+                    if cv2.waitKey(1) == 13 or int(img_id) == 150:
                         break
                 cam.release()
                 cv2.destroyAllWindows()
@@ -573,4 +583,7 @@ class Student:
             except Exception as e:
                 messagebox.showerror("Error", "Unable to connect to database due to {error}".format(error=str(e)), parent=self.root)
 
+
+    def main(self):
+        self.app = main.Face_Recognition_System(self.root)
 

@@ -5,11 +5,12 @@ from PIL import Image, ImageTk
 import main
 from tkinter import messagebox
 
-global Frame_login1
 class Login:
     def __init__(self, root):
+
         self.root = root
-        root.iconphoto(False, ImageTk.PhotoImage(file='D:\My_Programs\Python\Auto Attendance\images\login2.jpg'))
+        root_icon = ImageTk.PhotoImage(file="D:\My_Programs\Python\Auto Attendance\images\login2.jpg")
+        root.iconphoto(False, root_icon)
         self.root.title("Login System")
 
         self.root.geometry("1920x1080+0+0")
@@ -38,12 +39,10 @@ class Login:
         backimg_label.place(x=0, y=0, width=1920, height=950)
 
         inside_img = Image.open(r"D:\My_Programs\Python\Auto Attendance\images\bg7.jpg")
-        inside_img = inside_img.resize((455, 450),
-                                       Image.ANTIALIAS)  # ANTIALIAS converts high level image to low level image
+        inside_img = inside_img.resize((455, 450), Image.ANTIALIAS)  # ANTIALIAS converts high level image to low level image
         self.insideimg = ImageTk.PhotoImage(inside_img)
 
-        text_label = Label(backimg_label, image=self.insideimg, text="WELCOME\nTO\nAUTO\nATTENDANCE", compound='center',
-                           font=('calibri', 60, "bold"), fg="white")
+        text_label = Label(backimg_label, image=self.insideimg, text="WELCOME\nTO\nAUTO\nATTENDANCE", compound='center', font=('calibri', 60, "bold"), fg="white")
         text_label.place(x=900, y=120)
 
         # LOGIN FRAME
@@ -75,6 +74,13 @@ class Login:
 
         login_password.place(x=30, y=245, width=270, height=35)
 
+        # ==== FORGOT PASSWORD BUTTON =========
+        btn1 = Button(frame_input,command = self.forget, text="Forgot Password?", cursor='hand2',
+
+                      font=('calibri', 12), bg='white', fg='orangered', bd=0)
+
+        btn1.place(x=110, y=305)
+
         # ===== LOGIN BUTTON=========
         btn2 = Button(frame_input, text="Login", command=self.login, cursor="hand2",
 
@@ -82,17 +88,19 @@ class Login:
 
                       bd=0, width=15, height=1)
 
-        btn2.place(x=90, y=320)
+        btn2.place(x=90, y=340)
 
-        # ========= REGISTER BUTTON ============
-        btn3 = Button(frame_input, command=self.Register, text="Create New Account"
+            # ========= REGISTER BUTTON ============
+        btn3 = Button(frame_input, command=self.Register, text="Not Registered?register"
 
-                      , cursor="hand2", font=("sans-ascii", 13), bg='green', fg="white")
+                      , cursor="hand2", font=("arial", 10), bg='white', fg="black", bd=0)
 
-        btn3.place(x=65, y=380, width=230)
+        btn3.place(x=110, y=390)
+
+    def forget(self):
+        messagebox.showinfo("Forget Password","Please contact your administrator!!", parent=self.root)
 
     def login(self):
-
         if self.login_username.get() == "" or self.login_password.get() == "":
             messagebox.showerror("Error", "All fields are required", parent=self.root)
         else:
@@ -118,9 +126,10 @@ class Login:
             except Exception as es:
                 messagebox.showerror('Error', f'Error Due to : {str(es)}', parent=self.root)
 
+
+
     def Register(self):
         # ====== REGISTRATION MAIN FRAME =========
-        global Frame_login1
         self.new_window = Toplevel(self.root)
         self.app = Login(self.new_window)
         Frame_login1 = Frame(self.new_window, bg="white")
@@ -147,7 +156,6 @@ class Login:
 
         label1.place(x=45, y=20)
 
-        # ======== USERNAME========
         label2 = Label(frame_input2, text="Username", font=("arial old style", 20, "bold"),
 
                        fg='orangered', bg='white')
@@ -158,17 +166,6 @@ class Login:
 
         username.place(x=30, y=145, width=270, height=35)
 
-
-        # ========== EMAIL ===========
-        label4 = Label(frame_input2, text="Email-id", font=("arial old style", 20, "bold"),fg='orangered', bg='white')
-
-        label4.place(x=330, y=95)
-
-        email = ttk.Entry(frame_input2, textvariable=self.email, font=("times new roman", 15, "bold"))
-
-        email.place(x=330, y=145, width=270, height=35)
-
-        # =========== PASSWORD ===============
         label3 = Label(frame_input2, text="Password", font=("arial old style", 20, "bold"), fg='orangered', bg='white')
 
         label3.place(x=30, y=195)
@@ -177,7 +174,16 @@ class Login:
 
         password.place(x=30, y=245, width=270, height=35)
 
-        # ========== CONFIRM PASSWORD =============
+        label4 = Label(frame_input2, text="Email-id", font=("arial old style", 20, "bold"),
+
+                       fg='orangered', bg='white')
+
+        label4.place(x=330, y=95)
+
+        email = ttk.Entry(frame_input2, textvariable=self.email, font=("times new roman", 15, "bold"))
+
+        email.place(x=330, y=145, width=270, height=35)
+
         label5 = Label(frame_input2, text="Confirm Password",
 
                        font=("arial old style", 20, "bold"), fg='orangered', bg='white')
@@ -188,8 +194,6 @@ class Login:
 
         cnfm_passwd.place(x=330, y=245, width=270, height=35)
 
-
-        # ======== REGISTER BUTTON ===========
         btn2 = Button(frame_input2, command=self.register, text="Register"
 
                       , cursor="hand2", font=("times new roman", 15), fg="white",
@@ -199,10 +203,10 @@ class Login:
         btn2.place(x=90, y=340)
 
 
-    # =========== REGISTRATION FUNCTION ===============
+
     def register(self):
         if self.username.get() == "" or self.passwd.get() == "" or self.email.get() == "" or self.cnfm_passwd.get() == "":
-            messagebox.showerror("Error", "All Fields Are Required", parent=self.new_window)
+            messagebox.showerror("Error", "All Fields Are Required", parent=self.root)
         elif len(self.passwd.get()) < 8:
             messagebox.showerror("Invalid", "Length of password must be greater than 8", parent=self.root)
         elif self.passwd.get() != self.cnfm_passwd.get():
@@ -221,6 +225,7 @@ class Login:
                 row = new_cursor.fetchone()
                 if row is not None:
                     messagebox.showerror("Error", "User already exists!!", parent=self.root)
+
                     self.regclear()
                 else:
                     new_cursor.execute("INSERT INTO `register` VALUES(%s,%s,%s,%s)",
@@ -230,10 +235,11 @@ class Login:
                     con.close()
                     messagebox.showinfo("Success", "Registration Successful", parent=self.root)
                     self.regclear()
+
                     self.new_window.destroy()
             except Exception as es:
                 messagebox.showerror("Error", f"Error due to:{str(es)}"
-                                     , parent=self.new_window)
+                                     , parent=self.root)
 
     def regclear(self):
         self.username.set("")
@@ -246,13 +252,11 @@ class Login:
         self.login_password.set("")
 
     def main_page(self):
-        self.new_window = Toplevel(self.root)
-        self.app = main.Face_Recognition_System(self.new_window)
+        self.app = main.Face_Recognition_System(self.root)
 
 
 if __name__ == '__main__':
     root = Tk()
-    # Creating an object for the class
-    obj = Login(root)
+    obj = Login(root)  # Creating an object for the class
     obj.loginform()
     root.mainloop()
